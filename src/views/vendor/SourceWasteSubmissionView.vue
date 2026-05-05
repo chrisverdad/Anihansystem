@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between">
           <div>
             <h1 class="text-2xl font-bold text-gray-900">Source Waste Submissions</h1>
-            <p class="text-gray-600 mt-1">Submissions are recorded immediately—no admin approval step</p>
+            
           </div>
           <div class="flex items-center space-x-4">
             <select v-model="statusFilter" class="form-input">
@@ -104,9 +104,7 @@
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Location
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Pickup status
-                </th>
+                
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Submitted
                 </th>
@@ -181,11 +179,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {{ submission.location }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span :class="getVendorStatusBadgeClass(submission.status)">
-                    {{ vendorStatusLabel(submission.status) }}
-                  </span>
-                </td>
+                
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {{ formatDate(submission.submitted_at) }}
                 </td>
@@ -474,7 +468,7 @@
               <p class="text-sm text-gray-900">{{ selectedSubmission.description }}</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="text-sm font-medium text-gray-500">Quantity</label>
                 <p class="text-sm text-gray-900">{{ selectedSubmission.quantity }} {{ selectedSubmission.unit }}</p>
@@ -482,12 +476,6 @@
               <div>
                 <label class="text-sm font-medium text-gray-500">Condition</label>
                 <p class="text-sm text-gray-900">{{ selectedSubmission.condition.replace('_', ' ') }}</p>
-              </div>
-              <div>
-                <label class="text-sm font-medium text-gray-500">Pickup status</label>
-                <span :class="getVendorStatusBadgeClass(selectedSubmission.status)">
-                  {{ vendorStatusLabel(selectedSubmission.status) }}
-                </span>
               </div>
             </div>
 

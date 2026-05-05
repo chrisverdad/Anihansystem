@@ -282,8 +282,15 @@ const wasteTypeImageMap: Record<string, string> = {
 }
 
 const getWasteTypeImage = (wasteTypeName: string): string => {
-  const lowerName = wasteTypeName.toLowerCase()
-  return wasteTypeImageMap[lowerName] || '/photos/vegetables.webp' // default fallback
+  const lowerName = (wasteTypeName || '').toLowerCase().trim()
+
+  // Specific overrides to handle plural/singular and common naming variants
+  if (lowerName.includes('overripe') && lowerName.includes('papaya')) return '/photos/overripe papaya.jpg'
+  if (lowerName.includes('overripe') && lowerName.includes('banana')) return '/photos/overripe banana.jpg'
+  if (lowerName.includes('bruised') && (lowerName.includes('tomato') || lowerName.includes('tomatos') || lowerName.includes('tomatoes'))) return '/photos/bruised tomatos.jpg'
+
+  // Fallback to exact map key or default image
+  return wasteTypeImageMap[lowerName] || '/photos/vegetables.webp'
 }
 
 const sourceSubmissionStatusLabel = (status: string) => {
