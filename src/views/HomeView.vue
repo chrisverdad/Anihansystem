@@ -63,7 +63,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative" style="background-image: url('/image/homeBackground.png'); background-size: cover; background-position: center;">
+    <div class="relative" :style="{ backgroundImage: `url(${homeBackgroundUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         <div class="text-center">
           <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
@@ -566,6 +566,9 @@ import apiService from '@/services/api'
 import { getImageUrl } from '@/utils/imageUtils'
 import { resolveDemoImageUrl } from '@/constants/demoMedia'
 import type { Product } from '@/types'
+
+// Import background so Vite includes it in the build output (avoids relying on /image/ at runtime)
+import homeBackgroundUrl from '../../image/homeBackground.png'
 
 const authStore = useAuthStore()
 
