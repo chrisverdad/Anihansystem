@@ -33,12 +33,8 @@
       >
         <div class="flex justify-center mb-5 sm:mb-6">
           <div class="flex items-center gap-2 sm:gap-3">
-            <div
-              class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-violet-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-violet-600/30"
-            >
-              <span class="text-white font-bold text-xl sm:text-3xl tracking-tight">A</span>
-            </div>
-            <span class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">AniHan</span>
+            <img src="/image/logoAnihan.png" alt="AniHan" class="h-14 w-auto object-contain" />
+            <span class="text-2xl sm:text-3xl font-bold logo-bubbly tracking-tight">AniHan</span>
           </div>
         </div>
 

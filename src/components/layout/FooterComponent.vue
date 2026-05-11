@@ -5,12 +5,8 @@
         <!-- Brand Section -->
         <div class="col-span-1 md:col-span-2">
           <div class="flex items-center gap-3 mb-4">
-            <div
-              class="w-10 h-10 bg-gradient-to-br from-violet-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-900/40"
-            >
-              <span class="text-white font-bold text-lg tracking-tight">A</span>
-            </div>
-            <span class="text-xl font-bold tracking-tight">AniHan</span>
+            <img src="/image/logoAnihan.png" alt="AniHan" class="h-10 w-auto object-contain" />
+            <span class="text-xl font-bold logo-bubbly tracking-tight">AniHan</span>
           </div>
           <p class="text-slate-400 mb-4 max-w-md leading-relaxed">
             A Digital Platform for Repurposing Agricultural Food Waste in Butuan City. 

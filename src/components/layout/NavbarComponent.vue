@@ -7,12 +7,8 @@
         <!-- Logo and Brand -->
         <div class="flex items-center">
           <router-link to="/dashboard" class="flex items-center gap-2.5 group">
-            <div
-              class="w-9 h-9 bg-gradient-to-br from-violet-600 to-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-violet-500/20 group-hover:shadow-lg group-hover:shadow-violet-500/25 transition-shadow duration-200"
-            >
-              <span class="text-white font-bold text-sm tracking-tight">A</span>
-            </div>
-            <span class="text-lg font-bold text-gray-900 tracking-tight">AniHan</span>
+            <img src="/image/logoAnihan.png" alt="AniHan" class="h-9 w-auto object-contain" />
+            <span class="text-lg font-bold logo-bubbly tracking-tight">AniHan</span>
           </router-link>
         </div>
 

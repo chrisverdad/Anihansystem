@@ -34,12 +34,8 @@
         <!-- Logo + titles on solid white for WCAG contrast -->
         <div class="flex justify-center mb-5 sm:mb-6">
           <div class="flex items-center gap-2 sm:gap-3">
-            <div
-              class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-violet-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-violet-600/30"
-            >
-              <span class="text-white font-bold text-xl sm:text-3xl tracking-tight">A</span>
-            </div>
-            <span class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">AniHan</span>
+            <img src="/image/logoAnihan.png" alt="AniHan" class="h-14 w-auto object-contain" />
+            <span class="text-2xl sm:text-3xl font-bold logo-bubbly tracking-tight">AniHan</span>
           </div>
         </div>
 
@@ -126,7 +122,7 @@
             <button
               type="submit"
               :disabled="loading"
-              class="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              class="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
               <span v-if="loading" class="flex items-center">
                 <svg class="animate-spin -ml-1 mr-2 sm:mr-3 h-3 w-3 sm:h-4 sm:w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

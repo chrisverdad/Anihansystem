@@ -291,3 +291,42 @@ migrateBlobUrlsInStorage()
 dataPersistenceManager.initializeAllStores().catch(console.error)
 
 app.mount('#app')
+
+// Simple IntersectionObserver to add `is-visible` to cards for scroll animations
+if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const el = entry.target as HTMLElement
+        if (entry.isIntersecting) {
+          el.classList.add('is-visible')
+          // Stop observing once visible to avoid repeated triggers
+          io.unobserve(el)
+        }
+      })
+    },
+    {
+      root: null,
+      rootMargin: '0px 0px -8% 0px',
+      threshold: 0.12
+    }
+  )
+
+  // Attach to all elements with class `card`.
+  // Add `scroll-animated` class so CSS controls initial hidden state.
+  const initCards = () => {
+    const selector = '.card, .rounded-2xl'
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(selector))
+    cards.forEach((c) => {
+      if (!c.classList.contains('scroll-animated')) c.classList.add('scroll-animated')
+      io.observe(c)
+    })
+  }
+
+  // Run after next paint to catch server-rendered or initial elements
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    requestAnimationFrame(initCards)
+  } else {
+    window.addEventListener('DOMContentLoaded', initCards, { once: true })
+  }
+}

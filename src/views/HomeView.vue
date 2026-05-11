@@ -8,12 +8,10 @@
         <div class="flex justify-between h-14 sm:h-16">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="flex items-center space-x-1 sm:space-x-2">
-              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-violet-600 to-emerald-600 rounded-lg flex items-center justify-center">
-                <span class="text-white font-bold text-sm sm:text-lg">A</span>
-              </div>
-              <span class="text-lg sm:text-xl font-bold text-gray-900">AniHan</span>
-            </div>
+            <router-link to="/" class="flex items-center space-x-2">
+              <img src="/image/logoAnihan.png" alt="AniHan" class="h-8 sm:h-10 object-contain" />
+              <span class="text-lg sm:text-xl logo-bubbly">AniHan</span>
+            </router-link>
           </div>
 
           <!-- Navigation Links -->
@@ -54,7 +52,7 @@
               </router-link>
               <router-link
                 to="/register?role=user"
-                class="btn-primary bg-gradient-to-r from-violet-600 to-emerald-600 hover:from-violet-700 hover:to-emerald-700 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2"
+                class="btn-secondary text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2"
               >
                 Get Started
               </router-link>
@@ -65,19 +63,19 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-r from-violet-600 via-emerald-600 to-diamond-600">
+    <div class="relative" style="background-image: url('/image/homeBackground.png'); background-size: cover; background-position: center;">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         <div class="text-center">
           <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
             AniHan: A Digital Platform for Repurposing
-            <span class="block text-emerald-200 mt-2">Agricultural Food Waste in Butuan City</span>
+            <span class="block text-white mt-2">Agricultural Food Waste in Butuan City</span>
           </h1>
-          <p class="text-sm sm:text-base lg:text-xl text-emerald-100 mb-6 sm:mb-8 max-w-4xl mx-auto px-4">
+          <p class="text-sm sm:text-base lg:text-xl text-white mb-6 sm:mb-8 max-w-4xl mx-auto px-4">
             A comprehensive digital system that enables vendors to manage and reduce food waste by converting surplus or damaged agricultural produce into valuable products such as compost fertilizers and sustainable food items.
           </p>
           <div v-if="!authStore.isAuthenticated" class="flex flex-col items-stretch sm:items-center gap-4 px-4 max-w-2xl mx-auto">
-            <p class="text-sm text-emerald-100/95">
-              Choose how you want to participate—supply repurposed goods as a vendor, or shop the catalog as a buyer.
+            <p class="text-sm text-white">
+              Choose how you want to participate supply repurposed goods as a vendor, or shop the catalog as a buyer.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full">
               <router-link to="/register?role=vendor" class="btn-cta-gradient-vendor w-full sm:w-auto">
@@ -118,7 +116,7 @@
           <div class="rounded-2xl bg-white border border-violet-100 shadow-sm shadow-violet-500/5 p-6 sm:p-8 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center text-violet-600">
-                <BuildingStorefrontIcon class="w-7 h-7" />
+                <img src="/image/farmerIcon.png" alt="Vendors" class="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
               </div>
               <h3 class="text-xl font-bold text-gray-900">Vendors</h3>
             </div>
@@ -151,7 +149,7 @@
           <div class="rounded-2xl bg-white border border-emerald-100 shadow-sm shadow-emerald-500/5 p-6 sm:p-8 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                <ShoppingBagIcon class="w-7 h-7" />
+                <img src="/image/basketIcon.png" alt="Users" class="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
               </div>
               <h3 class="text-xl font-bold text-gray-900">Users (buyers)</h3>
             </div>
@@ -291,7 +289,7 @@
           <div class="card text-center">
             <div class="card-body p-4 sm:p-6">
               <div class="w-12 h-12 sm:w-16 sm:h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <CubeIcon class="w-6 h-6 sm:w-8 sm:h-8 text-violet-600" />
+                <img src="/image/farmerIcon.png" alt="Vendors" class="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
               </div>
               <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">For Vendors</h3>
               <ul class="text-left space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
@@ -323,7 +321,7 @@
           <div class="card text-center">
             <div class="card-body p-4 sm:p-6">
               <div class="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <ShoppingBagIcon class="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" />
+                <img src="/image/basketIcon.png" alt="Consumers" class="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
               </div>
               <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">For Consumers</h3>
               <ul class="text-left space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
@@ -355,7 +353,7 @@
           <div class="card text-center">
             <div class="card-body p-4 sm:p-6">
               <div class="w-12 h-12 sm:w-16 sm:h-16 bg-diamond-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <SparklesIcon class="w-6 h-6 sm:w-8 sm:h-8 text-diamond-600" />
+                <img src="/image/websiteIcon.png" alt="System Capabilities" class="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
               </div>
               <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">System Capabilities</h3>
               <ul class="text-left space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
@@ -453,13 +451,7 @@
           </div>
           <div class="relative">
             <div class="aspect-w-16 aspect-h-9">
-              <div class="bg-gradient-to-r from-primary-500 to-green-600 rounded-lg h-64 sm:h-80 lg:h-96 flex items-center justify-center">
-                <div class="text-center text-white">
-                  <SunIcon class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto mb-3 sm:mb-4 opacity-50" />
-                  <p class="text-base sm:text-lg lg:text-xl font-medium">Sustainable Agriculture</p>
-                  <p class="text-green-200 text-sm sm:text-base">For a Better Tomorrow</p>
-                </div>
-              </div>
+              <img src="/image/logoAnihan.png" alt="AniHan" class="mx-auto h-64 sm:h-80 lg:h-96 object-contain rounded-lg" />
             </div>
           </div>
         </div>
@@ -467,7 +459,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-violet-600 to-emerald-600">
+    <section class="py-12 sm:py-16 lg:py-20 bg-emerald-600">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Join the Agricultural Waste Revolution</h2>
         <p class="text-base sm:text-lg lg:text-xl text-emerald-100 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
@@ -502,10 +494,8 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
           <div>
             <div class="flex items-center space-x-1 sm:space-x-2 mb-3 sm:mb-4">
-              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-violet-600 to-emerald-600 rounded-lg flex items-center justify-center">
-                <span class="text-white font-bold text-sm sm:text-lg">A</span>
-              </div>
-              <span class="text-lg sm:text-xl font-bold">AniHan</span>
+              <img src="/image/logoAnihan.png" alt="AniHan" class="h-8 sm:h-10 object-contain" />
+              <span class="text-lg sm:text-xl font-bold logo-bubbly">AniHan</span>
             </div>
             <p class="text-gray-400 text-xs sm:text-sm">
               A Digital Platform for Repurposing Agricultural Food Waste in Butuan City - 
@@ -569,9 +559,7 @@ import {
   CubeIcon,
   CheckIcon,
   ShoppingBagIcon,
-  SparklesIcon,
-  SunIcon,
-  BuildingStorefrontIcon
+  SunIcon
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
 import apiService from '@/services/api'
