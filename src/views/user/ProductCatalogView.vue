@@ -339,19 +339,126 @@
                       />
                       <span>GCash</span>
                     </label>
+                    <label class="flex items-center">
+                      <input
+                        v-model="paymentMethod"
+                        type="radio"
+                        value="bank"
+                        class="mr-2"
+                      />
+                      <span>Bank Transfer (PNB)</span>
+                    </label>
                   </div>
                 </div>
                 
-                <div v-if="paymentMethod === 'gcash'" class="form-group">
-  <label class="form-label">Send Payment To (GCash)</label>
-  <input
-    type="text"
-    value="09165283313"
-    class="form-input"
-    readonly
-  />
-  <small class="form-help">Please send your payment to the number above.</small>
-</div>
+                <!-- Cash on Delivery Section -->
+                <div v-if="paymentMethod === 'cash'" class="form-group bg-yellow-50 p-4 rounded-lg">
+                  <label class="form-label">Cash on Delivery</label>
+                  <div class="text-sm text-gray-600">
+                    <p class="font-semibold">You will pay when the order arrives</p>
+                    <p class="mt-1">Please ensure someone is available to receive the package and make the payment upon delivery.</p>
+                  </div>
+                </div>
+                
+                <!-- GCash Payment Section -->
+                <div v-if="paymentMethod === 'gcash'" class="form-group bg-blue-50 p-4 rounded-lg">
+                  <label class="form-label">GCash Payment</label>
+                  <div class="mb-4">
+                    <img 
+                      src="/photos/GCash.jpg" 
+                      alt="GCash" 
+                      class="w-32 h-auto rounded-lg mb-3"
+                    />
+                    <div class="text-sm text-gray-600">
+                      <p class="font-semibold">Send payment to: <span class="text-primary-600">09165283313</span></p>
+                      <p class="mt-1">Please send your payment and provide proof of payment below.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Receipt/Reference Number <span class="text-red-500">*</span></label>
+                    <p class="text-sm text-gray-600 mb-2">Upload receipt image or enter reference number</p>
+                    <div class="space-y-3">
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Receipt Image</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          @change="(e) => {
+                            const files = (e.target as HTMLInputElement).files;
+                            if (files && files[0]) {
+                              receiptFile = files[0];
+                              receiptFileName = files[0].name;
+                            }
+                          }"
+                          class="form-input"
+                        />
+                        <p v-if="receiptFileName" class="text-sm text-green-600 mt-1">✓ {{ receiptFileName }} selected</p>
+                      </div>
+                      <div class="text-center text-gray-500">or</div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">GCash Reference Number</label>
+                        <input
+                          v-model="paymentReference"
+                          type="text"
+                          placeholder="Enter GCash reference number"
+                          class="form-input"
+                        />
+                      </div>
+                    </div>
+                    <small class="form-help text-red-600">You must provide either an uploaded receipt or a reference number to complete the order.</small>
+                  </div>
+                </div>
+                
+                <!-- Bank Transfer Payment Section -->
+                <div v-if="paymentMethod === 'bank'" class="form-group bg-green-50 p-4 rounded-lg">
+                  <label class="form-label">PNB Bank Transfer</label>
+                  <div class="mb-4">
+                    <img 
+                      src="/photos/PNB.png" 
+                      alt="PNB Bank" 
+                      class="w-32 h-auto rounded-lg mb-3"
+                    />
+                    <div class="text-sm text-gray-600">
+                      <p class="font-semibold">Account Number: <span class="text-primary-600 font-bold">402949769</span></p>
+                      <p class="mt-1">Please transfer your payment to the PNB account and provide proof of transfer below.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Receipt/Reference Number <span class="text-red-500">*</span></label>
+                    <p class="text-sm text-gray-600 mb-2">Upload receipt image or enter reference number</p>
+                    <div class="space-y-3">
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Receipt Image</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          @change="(e) => {
+                            const files = (e.target as HTMLInputElement).files;
+                            if (files && files[0]) {
+                              receiptFile = files[0];
+                              receiptFileName = files[0].name;
+                            }
+                          }"
+                          class="form-input"
+                        />
+                        <p v-if="receiptFileName" class="text-sm text-green-600 mt-1">✓ {{ receiptFileName }} selected</p>
+                      </div>
+                      <div class="text-center text-gray-500">or</div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bank Reference Number</label>
+                        <input
+                          v-model="paymentReference"
+                          type="text"
+                          placeholder="Enter bank reference number"
+                          class="form-input"
+                        />
+                      </div>
+                    </div>
+                    <small class="form-help text-red-600">You must provide either an uploaded receipt or a reference number to complete the order.</small>
+                  </div>
+                </div>
                 
                 <div class="form-group">
                   <label class="form-label">Delivery Address</label>
@@ -431,8 +538,10 @@ const currentPage = ref(1)
 const itemsPerPage = ref(12)
 const selectedProduct = ref<Product | null>(null)
 const orderQuantity = ref(1)
-const paymentMethod = ref<'cash' | 'gcash'>('cash')
+const paymentMethod = ref<'cash' | 'gcash' | 'bank'>('gcash')
 const paymentReference = ref('')
+const receiptFile = ref<File | null>(null)
+const receiptFileName = ref('')
 const deliveryAddress = ref('')
 const deliveryNotes = ref('')
 const imageErrors = ref<Record<string, boolean>>({})
@@ -536,6 +645,12 @@ const placeOrder = async () => {
       return
     }
     
+    // Validate receipt or reference number for GCash and Bank payment (not required for Cash)
+    if ((paymentMethod.value === 'gcash' || paymentMethod.value === 'bank') && !receiptFile.value && !paymentReference.value) {
+      toast.error(`Please upload a receipt image or provide a reference number for ${paymentMethod.value === 'gcash' ? 'GCash' : 'Bank'} payment`)
+      return
+    }
+    
     // Debug: Check if user is authenticated
     console.log('Current user:', authStore.user)
     console.log('User ID:', authStore.user?.id)
@@ -575,6 +690,8 @@ const resetOrderForm = () => {
   orderQuantity.value = 1
   paymentMethod.value = 'cash'
   paymentReference.value = ''
+  receiptFile.value = null
+  receiptFileName.value = ''
   deliveryAddress.value = ''
   deliveryNotes.value = ''
 }

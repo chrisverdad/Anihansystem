@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS orders (
     total_price DECIMAL(10, 2) NOT NULL CHECK (total_price >= 0),
     status ENUM('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
     payment_status ENUM('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending',
-    payment_method ENUM('cash', 'gcash') NOT NULL,
+    payment_method ENUM('cash', 'gcash', 'bank') NOT NULL,
     payment_reference VARCHAR(255) DEFAULT '',
     -- Fulfillment lifecycle; vendor may update via PUT /orders/:id (JWT). deliveries.status stays in sync when either side changes.
     delivery_status ENUM('pending', 'assigned', 'picked_up', 'in_transit', 'delivered', 'failed') DEFAULT 'pending',

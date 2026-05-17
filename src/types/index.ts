@@ -169,8 +169,8 @@ export interface Order {
   total_price: number
   status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
-  payment_method: 'cash' | 'gcash'
-  payment_reference?: string // For GCash number or cash reference
+  payment_method: 'cash' | 'gcash' | 'bank'
+  payment_reference?: string // For GCash reference number, Bank reference number, or cash reference
   delivery_status: 'pending' | 'assigned' | 'picked_up' | 'in_transit' | 'delivered' | 'failed'
   delivery_address: string
   delivery_notes?: string

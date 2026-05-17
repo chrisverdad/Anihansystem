@@ -35,7 +35,13 @@
                   class="w-12 h-12 rounded-lg flex items-center justify-center"
                   :style="{ backgroundColor: category.color + '20', color: category.color }"
                 >
-                  <component :is="getIconComponent(category.icon)" class="w-6 h-6" />
+                  <img 
+                    v-if="isImageIcon(category.icon)"
+                    :src="getImagePath(category.icon)"
+                    :alt="category.name"
+                    class="w-6 h-6"
+                  />
+                  <component v-else :is="getIconComponent(category.icon)" class="w-6 h-6" />
                 </div>
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900">{{ category.name }}</h3>
@@ -154,6 +160,9 @@
               <label class="form-label">Icon</label>
               <select v-model="categoryForm.icon" class="form-input" required>
                 <option value="">Select an icon</option>
+                <option value="vegeIcon.png">Vegetables</option>
+                <option value="fruitIcon.png">Fruit</option>
+                <option value="grainIcon.png">Grains</option>
                 <option value="CubeIcon">Cube</option>
                 <option value="SunIcon">Sun</option>
                 <option value="HeartIcon">Heart</option>
@@ -259,6 +268,14 @@ const getIconComponent = (iconName: string) => {
     SparklesIcon
   }
   return icons[iconName] || CubeIcon
+}
+
+const isImageIcon = (iconName: string) => {
+  return iconName.endsWith('.png') || iconName.endsWith('.jpg') || iconName.endsWith('.jpeg')
+}
+
+const getImagePath = (iconName: string) => {
+  return `/photos/${iconName}`
 }
 
 const editCategory = (category: WasteCategory) => {
