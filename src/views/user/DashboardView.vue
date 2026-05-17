@@ -193,6 +193,38 @@
         </div>
       </div>
 
+      <!-- Butuan City Markets Map -->
+      <div class="card mb-6 sm:mb-8">
+        <div class="card-header p-3 sm:p-4 lg:p-6">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900">Butuan City Public Markets</h3>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">Explore nearby public market locations in Butuan City.</p>
+        </div>
+        <div class="card-body p-3 sm:p-4 lg:p-6">
+          <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-4">
+            <div class="h-72 sm:h-96 overflow-hidden rounded-2xl border border-gray-200">
+              <iframe
+                title="Butuan City Public Markets"
+                class="w-full h-full"
+                src="https://maps.google.com/maps?q=public%20market%20Butuan%20City&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <div class="space-y-4">
+              <div
+                v-for="market in publicMarkets"
+                :key="market.name"
+                class="p-4 bg-gray-50 rounded-2xl border border-gray-200"
+              >
+                <h4 class="text-sm sm:text-base font-semibold text-gray-900">{{ market.name }}</h4>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ market.barangay }}</p>
+                <p class="text-xs text-gray-500 mt-2">{{ market.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Featured Products -->
       <div class="card">
         <div class="card-header p-3 sm:p-4 lg:p-6">
@@ -299,6 +331,29 @@ const featuredProducts = ref<DashboardFeaturedProduct[]>([
     description: 'Rich compost made from overripe bananas',
     price: 150,
     image_url: DEMO_WASTE_TYPE_IMAGES.compost
+  }
+])
+
+const publicMarkets = ref([
+  {
+    name: 'Butuan Public Market',
+    barangay: 'Poblacion',
+    description: 'The central market in Butuan City for fresh produce and local goods.'
+  },
+  {
+    name: 'Libertad Public Market',
+    barangay: 'Libertad',
+    description: 'Popular neighborhood market offering fruits, vegetables, and seafood.'
+  },
+  {
+    name: 'San Roque Public Market',
+    barangay: 'San Roque',
+    description: 'A community market serving nearby residential areas.'
+  },
+  {
+    name: 'Ampayon Public Market',
+    barangay: 'Ampayon',
+    description: 'Local market known for fresh vegetable and meat vendors.'
   }
 ])
 

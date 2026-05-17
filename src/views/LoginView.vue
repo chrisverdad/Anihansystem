@@ -136,41 +136,7 @@
             </button>
           </div>
 
-          <!-- Demo Accounts -->
-          <div class="mt-4 sm:mt-6">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center text-xs sm:text-sm">
-                <span class="px-3 bg-white text-slate-600 font-medium">Demo Accounts</span>
-              </div>
-            </div>
-
-            <div class="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
-              <button
-                type="button"
-                @click="fillDemoAccount('admin')"
-                class="w-full text-left px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200/80 transition-colors duration-200"
-              >
-                <strong class="text-slate-900">Admin:</strong> admin@anihan.com / admin123
-              </button>
-              <button
-                type="button"
-                @click="fillDemoAccount('vendor')"
-                class="w-full text-left px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200/80 transition-colors duration-200"
-              >
-                <strong class="text-slate-900">Vendor:</strong> vendor@anihan.com / vendor123
-              </button>
-              <button
-                type="button"
-                @click="fillDemoAccount('user')"
-                class="w-full text-left px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200/80 transition-colors duration-200"
-              >
-                <strong class="text-slate-900">User:</strong> user@anihan.com / user123
-              </button>
-            </div>
-          </div>
+          <!-- Demo Accounts removed -->
         </form>
       </div>
     </div>
@@ -197,16 +163,6 @@ const form = reactive<LoginCredentials & { rememberMe: boolean }>({
   rememberMe: false
 })
 
-const fillDemoAccount = (role: string) => {
-  const accounts = {
-    admin: { email: 'admin@anihan.com', password: 'admin123' },
-    vendor: { email: 'vendor@anihan.com', password: 'vendor123' },
-    user: { email: 'user@anihan.com', password: 'user123' }
-  }
-  
-  form.email = accounts[role as keyof typeof accounts].email
-  form.password = accounts[role as keyof typeof accounts].password
-}
 
 const validateForm = () => {
   errors.value = {}

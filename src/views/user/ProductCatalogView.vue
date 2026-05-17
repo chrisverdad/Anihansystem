@@ -11,7 +11,7 @@
           <div class="flex items-center space-x-4">
             <select v-model="categoryFilter" class="form-input">
               <option value="">All Categories</option>
-              <option v-for="category in wasteStore.wasteCategories" :key="category.id" :value="category.name">
+              <option v-for="category in wasteStore.productCategories" :key="category.id" :value="category.id">
                 {{ category.name }}
               </option>
             </select>
@@ -171,7 +171,7 @@
                     <div class="flex flex-wrap items-center gap-2">
                       <span class="text-lg font-bold text-primary-600">₱{{ product.price }}</span>
                       <span class="text-sm text-gray-500">{{ product.stock_quantity }} {{ product.unit }} available</span>
-                      <span class="badge-primary">{{ product.category }}</span>
+                      <span class="badge-primary">{{ categoryLabel(product.category) }}</span>
                       <span v-if="vendorDisplay(product)" class="text-xs text-primary-700 font-medium">
                         {{ vendorDisplay(product) }}
                       </span>
@@ -400,6 +400,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
 import { useProductsStore } from '@/stores/products'
@@ -416,6 +417,7 @@ import { DEMO_WASTE_TYPE_IMAGES } from '@/constants/demoMedia'
 import type { Product } from '@/types'
 
 const toast = useToast()
+const route = useRoute()
 const authStore = useAuthStore()
 const productsStore = useProductsStore()
 const wasteStore = useWasteStore()
@@ -437,20 +439,29 @@ const imageErrors = ref<Record<string, boolean>>({})
 
 // Computed
 const filteredProducts = computed(() => {
-  let filtered = products.value
+  const q = String(searchQuery.value || '').toLowerCase().trim()
+  const sel = String(categoryFilter.value || '').toLowerCase().trim()
 
-  if (searchQuery.value) {
-    filtered = filtered.filter(product =>
-      product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-  }
+  return products.value.filter(product => {
+    const name = String(product.name || '').toLowerCase()
+    const desc = String(product.description || '').toLowerCase()
+    const prodCat = String(product.category || '').toLowerCase()
 
-  if (categoryFilter.value) {
-    filtered = filtered.filter(product => product.category === categoryFilter.value)
-  }
+    if (q) {
+      if (!name.includes(q) && !desc.includes(q)) return false
+    }
 
-  return filtered
+    if (sel) {
+      return prodCat === sel
+    }
+
+    return true
+  })
+})
+
+// Reset pagination when filters/search change
+watch([categoryFilter, searchQuery], () => {
+  currentPage.value = 1
 })
 
 const featuredProducts = computed(() => {
@@ -466,6 +477,20 @@ const paginatedProducts = computed(() => {
 const totalPages = computed(() => {
   return Math.ceil(filteredProducts.value.length / itemsPerPage.value)
 })
+
+const categoryLabel = (category: string) => {
+  const labels: Record<string, string> = {
+    vegetables: 'Vegetables',
+    grains: 'Grains',
+    fruits: 'Fruits',
+    compost: 'Compost',
+    fertilizer: 'Fertilizer',
+    preserved_food: 'Preserved food',
+    processed_food: 'Processed food',
+    other: 'Other'
+  }
+  return labels[category] || category
+}
 
 // Methods
 const loadProducts = async () => {
@@ -576,6 +601,15 @@ watch(products, () => {
 }, { deep: true })
 
 onMounted(() => {
+  // Initialize from route query if present
+  const qcat = String(route.query.category || '').toLowerCase()
+  if (qcat) categoryFilter.value = qcat
   loadProducts()
+})
+
+// Keep categoryFilter in sync with route (so back/forward work)
+watch(() => route.query.category, (val) => {
+  const c = String(val || '').toLowerCase()
+  categoryFilter.value = c
 })
 </script>

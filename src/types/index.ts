@@ -129,7 +129,15 @@ export interface Product {
   name: string
   description: string
   price: number
-  category: 'compost' | 'fertilizer' | 'preserved_food' | 'processed_food' | 'other'
+  category:
+    | 'vegetables'
+    | 'grains'
+    | 'fruits'
+    | 'compost'
+    | 'fertilizer'
+    | 'preserved_food'
+    | 'processed_food'
+    | 'other'
   image_url?: string
   stock_quantity: number
   unit: 'kg' | 'bags' | 'bottles' | 'pieces' | 'jars' | 'boxes'

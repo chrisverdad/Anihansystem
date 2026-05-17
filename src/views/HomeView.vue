@@ -222,12 +222,22 @@
           </div>
         </div>
 
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <article
-            v-for="product in publicProducts"
-            :key="product.id"
-            class="card overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
-          >
+
+        <template v-else>
+          <div class="mb-6 flex items-center justify-center gap-3 flex-wrap">
+            <button @click="goToCatalog('vegetables')" class="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium">Vegetables</button>
+            <button @click="goToCatalog('grains')" class="px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium">Grains</button>
+            <button @click="goToCatalog('fruits')" class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">Fruits</button>
+            <button @click="goToCatalog('compost')" class="px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-sm font-medium">Compost</button>
+            <button @click="goToCatalog('fertilizer')" class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-sm font-medium">Fertilizer</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <article
+              v-for="product in publicProducts"
+              :key="product.id"
+              class="card overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col"
+            >
             <div class="relative h-44 bg-gray-100">
               <img
                 v-if="product.image_url && !imageErrors[product.id]"
@@ -271,6 +281,7 @@
             </div>
           </article>
         </div>
+      </template>
       </div>
     </section>
 
@@ -564,6 +575,7 @@ import {
 import { useAuthStore } from '@/stores/auth'
 import apiService from '@/services/api'
 import { getImageUrl } from '@/utils/imageUtils'
+import { useRouter } from 'vue-router'
 import { resolveDemoImageUrl } from '@/constants/demoMedia'
 import type { Product } from '@/types'
 
@@ -589,6 +601,9 @@ function displayImageUrl(url: string) {
 
 function categoryLabel(cat: string) {
   const m: Record<string, string> = {
+    vegetables: 'Vegetables',
+    grains: 'Grains',
+    fruits: 'Fruits',
     compost: 'Compost',
     fertilizer: 'Fertilizer',
     preserved_food: 'Preserved food',
@@ -602,6 +617,12 @@ function vendorLine(p: Product) {
   const v = p.vendor
   if (!v) return ''
   return v.business_name?.trim() || v.full_name?.trim() || ''
+}
+
+const router = useRouter()
+
+function goToCatalog(category: string) {
+  router.push({ path: '/user/products', query: { category } })
 }
 
 onMounted(async () => {

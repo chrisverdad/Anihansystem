@@ -100,7 +100,7 @@ const initializeDatabase = async (): Promise<void> => {
         name VARCHAR(255) NOT NULL,
         description TEXT NOT NULL,
         price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
-        category ENUM('compost', 'fertilizer', 'preserved_food', 'processed_food', 'other') NOT NULL,
+        category ENUM('vegetables', 'grains', 'fruits', 'compost', 'fertilizer', 'preserved_food', 'processed_food', 'other') NOT NULL,
         image_url VARCHAR(500) DEFAULT '',
         stock_quantity INT NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
         unit ENUM('kg', 'bags', 'bottles', 'pieces', 'jars', 'boxes') NOT NULL,
@@ -168,6 +168,21 @@ const initializeDatabase = async (): Promise<void> => {
       }
     } catch (fkVendorErr) {
       console.warn('products → users vendor FK (optional):', fkVendorErr);
+    }
+
+    try {
+      const [rows] = await connection.query<RowDataPacket[]>(
+        `SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'products' AND COLUMN_NAME = 'category'`,
+        [dbName]
+      );
+      if (rows.length && !String(rows[0].COLUMN_TYPE).includes('vegetables')) {
+        await connection.query(
+          `ALTER TABLE products MODIFY COLUMN category ENUM('vegetables', 'grains', 'fruits', 'compost', 'fertilizer', 'preserved_food', 'processed_food', 'other') NOT NULL`
+        );
+      }
+    } catch (alterErr) {
+      console.warn('products.category enum migration:', alterErr);
     }
 
     try {

@@ -93,11 +93,11 @@ export const useWasteStore = defineStore('waste', () => {
   const inventoryItems = ref<InventoryItem[]>([])
   const wasteCategories = ref<WasteCategory[]>([])
   const productCategories = ref<Array<{id: string, name: string, description: string}>>([
+    { id: 'vegetables', name: 'Vegetables', description: 'Fresh and processed vegetables' },
+    { id: 'grains', name: 'Grains', description: 'Rice, wheat, and other grains' },
+    { id: 'fruits', name: 'Fruits', description: 'Fresh and processed fruits' },
     { id: 'compost', name: 'Compost', description: 'Organic compost made from waste materials' },
-    { id: 'fertilizer', name: 'Fertilizer', description: 'Natural fertilizers derived from waste' },
-    { id: 'preserved_food', name: 'Preserved Food', description: 'Food products preserved from waste materials' },
-    { id: 'processed_food', name: 'Processed Food', description: 'Processed food items made from waste' },
-    { id: 'other', name: 'Other', description: 'Other products made from waste materials' }
+    { id: 'fertilizer', name: 'Fertilizer', description: 'Natural fertilizers derived from waste' }
   ])
   const sourceWasteSubmissions = ref<SourceWasteSubmission[]>([])
   const loading = ref(false)
