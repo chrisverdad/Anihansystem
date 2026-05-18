@@ -479,8 +479,23 @@ const validateForm = () => {
   
   if (!form.password) {
     errors.value.password = 'Password is required'
-  } else if (form.password.length < 6) {
-    errors.value.password = 'Password must be at least 6 characters'
+  } else {
+    const passwordErrors = []
+    if (form.password.length < 8) {
+      passwordErrors.push('at least 8 characters')
+    }
+    if (!/[A-Z]/.test(form.password)) {
+      passwordErrors.push('one uppercase letter')
+    }
+    if (!/[a-z]/.test(form.password)) {
+      passwordErrors.push('one lowercase letter')
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(form.password)) {
+      passwordErrors.push('one special character (!@#$%^&*()_+-=[]{};\':\"\\|,.<>/?)')
+    }
+    if (passwordErrors.length > 0) {
+      errors.value.password = 'Password must contain ' + passwordErrors.join(', ')
+    }
   }
   
   if (!form.confirm_password) {

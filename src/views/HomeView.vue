@@ -449,8 +449,8 @@
             </p>
             <div class="flex items-center space-x-4">
               <div class="flex items-center">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span class="text-primary-600 font-bold text-sm sm:text-base">CS</span>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center">
+                  <img src="/image/CSU.png" alt="Caraga State University" class="w-full h-full object-contain rounded-full" />
                 </div>
                 <div class="ml-3">
                   <div class="font-medium text-gray-900 text-sm sm:text-base">Caraga State University</div>
