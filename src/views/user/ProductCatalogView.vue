@@ -480,6 +480,17 @@
                     class="form-input"
                   ></textarea>
                 </div>
+
+                <div class="form-group">
+                  <label class="form-label">Purpose <span class="text-red-500">*</span></label>
+                  <textarea
+                    v-model="purpose"
+                    rows="2"
+                    placeholder="What is the purpose of this purchase?"
+                    class="form-input"
+                    required
+                  ></textarea>
+                </div>
                 
                 <div class="flex items-center justify-end space-x-3">
                   <button
@@ -544,6 +555,7 @@ const receiptFile = ref<File | null>(null)
 const receiptFileName = ref('')
 const deliveryAddress = ref('')
 const deliveryNotes = ref('')
+const purpose = ref('')
 const imageErrors = ref<Record<string, boolean>>({})
 
 // Computed
@@ -645,6 +657,12 @@ const placeOrder = async () => {
       return
     }
     
+    // Validate purpose is filled
+    if (!purpose.value.trim()) {
+      toast.error('Please enter the purpose of this purchase')
+      return
+    }
+
     // Validate receipt or reference number for GCash and Bank payment (not required for Cash)
     if ((paymentMethod.value === 'gcash' || paymentMethod.value === 'bank') && !receiptFile.value && !paymentReference.value) {
       toast.error(`Please upload a receipt image or provide a reference number for ${paymentMethod.value === 'gcash' ? 'GCash' : 'Bank'} payment`)
@@ -684,7 +702,8 @@ const placeOrder = async () => {
       delivery_status: 'pending' as const,
       delivery_address: deliveryAddress.value,
       delivery_notes: deliveryNotes.value,
-      notes: deliveryNotes.value
+      notes: deliveryNotes.value,
+      purpose: purpose.value
     }
     
     console.log('Order data:', orderData)
@@ -711,6 +730,7 @@ const resetOrderForm = () => {
   receiptFileName.value = ''
   deliveryAddress.value = ''
   deliveryNotes.value = ''
+  purpose.value = ''
 }
 
 const handleImageError = (productId: string) => {

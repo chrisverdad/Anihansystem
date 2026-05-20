@@ -175,6 +175,7 @@ export interface Order {
   delivery_status: 'pending' | 'assigned' | 'picked_up' | 'in_transit' | 'delivered' | 'failed'
   delivery_address: string
   delivery_notes?: string
+  purpose?: string
   order_date: string
   delivery_date?: string
   notes?: string

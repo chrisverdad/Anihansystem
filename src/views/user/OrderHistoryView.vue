@@ -401,6 +401,9 @@
             <p v-if="selectedOrder.delivery_notes" class="text-xs text-slate-600 mt-2 pt-2 border-t border-slate-200/80">
               {{ selectedOrder.delivery_notes }}
             </p>
+            <p v-if="selectedOrder.purpose" class="text-xs text-slate-600 mt-2 pt-2 border-t border-slate-200/80">
+              <span class="font-semibold">Purpose:</span> {{ selectedOrder.purpose }}
+            </p>
           </div>
 
           <div

@@ -20,6 +20,7 @@ function mapOrderRow(row: RowDataPacket): OrderRecord {
     delivery_status: row.delivery_status,
     delivery_address: row.delivery_address,
     delivery_notes: row.delivery_notes,
+    purpose: row.purpose,
     order_date: row.order_date,
     delivery_date: row.delivery_date,
     notes: row.notes,
@@ -84,7 +85,7 @@ const Order = {
   findById: async (id: number | string): Promise<OrderRecord | null> => {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `
-      SELECT o.*,
+      SELECT o.*,  
              u.full_name as user_full_name, u.email as user_email,
              u.phone as user_phone, u.address as user_address
       FROM orders o
@@ -119,8 +120,8 @@ const Order = {
       `
       INSERT INTO orders (
         user_id, product_id, quantity, total_price, payment_method,
-        payment_reference, receipt_image, delivery_address, delivery_notes, order_date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        payment_reference, receipt_image, delivery_address, delivery_notes, purpose, order_date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       [
         orderData.user_id,
@@ -132,6 +133,7 @@ const Order = {
         orderData.receipt_image || '',
         orderData.delivery_address,
         orderData.delivery_notes || '',
+        orderData.purpose || '',
         orderData.order_date != null && orderData.order_date !== ''
           ? toMysqlDateTime(orderData.order_date as string | number | Date)
           : toMysqlDateTime(new Date())
@@ -151,6 +153,7 @@ const Order = {
       'delivery_status',
       'delivery_address',
       'delivery_notes',
+      'purpose',
       'delivery_date',
       'notes'
     ];

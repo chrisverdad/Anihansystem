@@ -514,6 +514,9 @@
                 <div v-if="selectedOrder.delivery_notes" class="mt-1 text-xs text-gray-500">
                   Notes: {{ selectedOrder.delivery_notes }}
                 </div>
+                <div v-if="selectedOrder.purpose" class="mt-1 text-xs text-gray-500">
+                  Purpose: {{ selectedOrder.purpose }}
+                </div>
               </div>
 
               <!-- Order Status -->
