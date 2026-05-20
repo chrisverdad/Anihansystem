@@ -111,6 +111,7 @@ export const useProductsStore = defineStore('products', () => {
       payment_status: row?.payment_status ?? 'pending',
       payment_method: row?.payment_method ?? 'cash',
       payment_reference: row?.payment_reference ?? '',
+      receipt_image: row?.receipt_image ?? '',
       delivery_status: row?.delivery_status ?? 'pending',
       delivery_address: row?.delivery_address ?? '',
       delivery_notes: row?.delivery_notes ?? '',

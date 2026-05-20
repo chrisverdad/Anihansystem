@@ -171,6 +171,7 @@ export interface Order {
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
   payment_method: 'cash' | 'gcash' | 'bank'
   payment_reference?: string // For GCash reference number, Bank reference number, or cash reference
+  receipt_image?: string // For GCash and Bank payment receipt image
   delivery_status: 'pending' | 'assigned' | 'picked_up' | 'in_transit' | 'delivered' | 'failed'
   delivery_address: string
   delivery_notes?: string

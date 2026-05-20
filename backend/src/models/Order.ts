@@ -16,6 +16,7 @@ function mapOrderRow(row: RowDataPacket): OrderRecord {
     payment_status: row.payment_status,
     payment_method: row.payment_method,
     payment_reference: row.payment_reference,
+    receipt_image: row.receipt_image,
     delivery_status: row.delivery_status,
     delivery_address: row.delivery_address,
     delivery_notes: row.delivery_notes,
@@ -118,8 +119,8 @@ const Order = {
       `
       INSERT INTO orders (
         user_id, product_id, quantity, total_price, payment_method,
-        payment_reference, delivery_address, delivery_notes, order_date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        payment_reference, receipt_image, delivery_address, delivery_notes, order_date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       [
         orderData.user_id,
@@ -128,6 +129,7 @@ const Order = {
         orderData.total_price,
         orderData.payment_method,
         orderData.payment_reference || '',
+        orderData.receipt_image || '',
         orderData.delivery_address,
         orderData.delivery_notes || '',
         orderData.order_date != null && orderData.order_date !== ''
@@ -145,6 +147,7 @@ const Order = {
       'payment_status',
       'payment_method',
       'payment_reference',
+      'receipt_image',
       'delivery_status',
       'delivery_address',
       'delivery_notes',

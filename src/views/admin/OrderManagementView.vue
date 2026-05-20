@@ -191,9 +191,21 @@
                     <span :class="getPaymentStatusBadgeClass(order.payment_status)">
                       {{ order.payment_status }}
                     </span>
-                    <span class="text-xs text-gray-500">
-                      {{ order.payment_method?.toUpperCase() }}
-                    </span>
+                    <!-- Bank Transfer Payment -->
+                    <div v-if="order.payment_method === 'bank'" class="text-xs space-y-0.5">
+                      <div class="text-blue-700 font-medium">PNB Bank</div>
+                      <div class="text-blue-600 font-mono text-xs">402949769</div>
+                      <div v-if="order.payment_reference" class="text-blue-500 font-mono text-xs">Ref: {{ order.payment_reference }}</div>
+                    </div>
+                    <!-- GCash Payment -->
+                    <div v-else-if="order.payment_method === 'gcash'" class="text-xs">
+                      <div class="text-purple-700 font-medium">GCash</div>
+                      <div v-if="order.payment_reference" class="text-purple-600 font-mono text-xs">{{ order.payment_reference }}</div>
+                    </div>
+                    <!-- Cash Payment -->
+                    <div v-else-if="order.payment_method === 'cash'" class="text-xs text-green-700 font-medium">
+                      Cash on Delivery
+                    </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -389,6 +401,61 @@
                 <div class="flex justify-between text-sm font-medium border-t pt-2">
                   <span class="text-gray-900">Total</span>
                   <span class="text-gray-900">₱{{ selectedOrder.total_price.toLocaleString() }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Payment Details Section -->
+            <div v-if="selectedOrder.payment_method === 'bank'" class="border-t pt-4 mt-4 rounded-lg bg-blue-50 p-4">
+              <h4 class="font-medium text-blue-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"></path>
+                </svg>
+                Bank Transfer Payment Details
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-blue-700">Bank</span>
+                  <span class="font-semibold text-blue-900">PNB</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-blue-700">Account</span>
+                  <span class="font-mono font-semibold text-blue-900">402949769</span>
+                </div>
+                <div v-if="selectedOrder.payment_reference" class="flex justify-between">
+                  <span class="text-blue-700">Reference #</span>
+                  <span class="font-mono text-blue-900">{{ selectedOrder.payment_reference }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-blue-700">Status</span>
+                  <span :class="['font-semibold', selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-amber-600']">
+                    {{ selectedOrder.payment_status?.toUpperCase() }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div v-else-if="selectedOrder.payment_method === 'gcash'" class="border-t pt-4 mt-4 rounded-lg bg-purple-50 p-4">
+              <h4 class="font-medium text-purple-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm0 8a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"></path>
+                </svg>
+                GCash Payment Details
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-purple-700">Payment Method</span>
+                  <span class="font-semibold text-purple-900">GCash</span>
+                </div>
+                <div v-if="selectedOrder.payment_reference" class="flex justify-between">
+                  <span class="text-purple-700">Reference #</span>
+                  <span class="font-mono text-purple-900">{{ selectedOrder.payment_reference }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-purple-700">Status</span>
+                  <span :class="['font-semibold', selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-amber-600']">
+                    {{ selectedOrder.payment_status?.toUpperCase() }}
+                  </span>
                 </div>
               </div>
             </div>

@@ -490,6 +490,32 @@ class ApiService {
     return this.token
   }
 
+  async uploadFile(formData: FormData) {
+    const url = `${this.baseURL}/uploads`
+    const headers: Record<string, string> = {
+      ...(this.token && { Authorization: `Bearer ${this.token}` }),
+    }
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: formData,
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || `Upload failed with status ${response.status}`)
+      }
+      
+      return data
+    } catch (error: any) {
+      console.error('File upload failed:', error.message)
+      throw error
+    }
+  }
+
   clearToken() {
     this.token = null
     localStorage.removeItem('anihan_token')

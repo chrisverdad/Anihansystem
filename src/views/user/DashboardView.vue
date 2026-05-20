@@ -197,24 +197,118 @@
       <div class="card mb-6 sm:mb-8">
         <div class="card-header p-3 sm:p-4 lg:p-6">
           <h3 class="text-base sm:text-lg font-semibold text-gray-900">Butuan City Public Markets</h3>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1">Explore nearby public market locations in Butuan City.</p>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">Explore nearby public market locations in Butuan City. Click market pins to see store details.</p>
         </div>
         <div class="card-body p-3 sm:p-4 lg:p-6">
           <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-4">
-            <div class="h-72 sm:h-96 overflow-hidden rounded-2xl border border-gray-200">
-              <iframe
-                title="Butuan City Public Markets"
-                class="w-full h-full"
-                src="https://maps.google.com/maps?q=public%20market%20Butuan%20City&output=embed"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              />
+            <div class="relative">
+              <div class="h-72 sm:h-96 overflow-hidden rounded-2xl border border-gray-200 relative">
+                <iframe
+                  title="Butuan City Public Markets"
+                  class="w-full h-full"
+                  :src="mapIframeSrc"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                />
+                <!-- Store Location Markers -->
+                <div v-if="showStores" class="absolute inset-0 pointer-events-none">
+                  <button
+                    v-for="marker in storeMarkers[selectedMarket] || []"
+                    :key="marker.id"
+                    @click="selectStoreMarker(marker)"
+                    :style="{ left: `${marker.position.x}%`, top: `${marker.position.y}%` }"
+                    class="absolute w-8 h-8 sm:w-10 sm:h-10 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                  >
+                    <div class="relative w-full h-full">
+                      <div class="w-full h-full bg-red-500 rounded-full border-2 border-white shadow-lg hover:bg-red-600 transition-colors flex items-center justify-center cursor-pointer">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                      <div class="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full shadow"></div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <!-- Stores Overlay on Map -->
+              <div
+                v-if="showStores && selectedMarketStores.length > 0"
+                class="absolute inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-lg border-t-2 border-primary-200 max-h-56 overflow-y-auto"
+              >
+                <div class="sticky top-0 bg-white border-b border-gray-200 p-3 sm:p-4 flex items-center justify-between">
+                  <h4 class="text-sm sm:text-base font-semibold text-gray-900">{{ selectedMarket }} - Stores</h4>
+                  <button
+                    @click="closeStoresModal"
+                    class="text-gray-500 hover:text-gray-700 font-bold text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div class="p-3 sm:p-4 space-y-2">
+                  <div
+                    v-for="store in selectedMarketStores"
+                    :key="store.name"
+                    @click="selectedStoreInfo = store"
+                    :class="[
+                      'p-3 rounded-lg border-2 cursor-pointer transition-all',
+                      selectedStoreInfo?.name === store.name
+                        ? 'bg-red-50 border-red-500 shadow-md'
+                        : 'bg-gradient-to-r from-primary-50 to-primary-100 border-primary-200 hover:shadow-md'
+                    ]"
+                  >
+                    <h5 class="text-xs sm:text-sm font-semibold text-gray-900">{{ store.name }}</h5>
+                    <p class="text-xs text-gray-600 mt-1">
+                      <span class="font-medium">Sells:</span> {{ store.products }}
+                    </p>
+                    <div class="mt-2 flex items-center">
+                      <span class="inline-block px-2 py-0.5 bg-primary-200 text-primary-800 text-xs font-medium rounded">
+                        Fruits
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Store Info Popup on Map -->
+              <div
+                v-if="selectedStoreInfo && showStores"
+                class="absolute top-4 right-4 bg-white rounded-lg shadow-xl border-2 border-red-500 max-w-xs z-10 pointer-events-auto"
+              >
+                <div class="p-4">
+                  <div class="flex items-start justify-between mb-2">
+                    <h5 class="text-sm font-bold text-gray-900 flex-1">{{ selectedStoreInfo.name }}</h5>
+                    <button
+                      @click="selectedStoreInfo = null"
+                      class="ml-2 text-gray-500 hover:text-gray-700 font-bold text-lg"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <p class="text-xs text-gray-600 mb-3">
+                    <span class="font-semibold">Products:</span> {{ selectedStoreInfo.products }}
+                  </p>
+                  <div class="flex items-center space-x-2">
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded">
+                      📍 Store Location
+                    </span>
+                    <span class="inline-block px-2 py-1 bg-primary-100 text-primary-800 text-xs font-semibold rounded">
+                      🍎 Fruits
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="space-y-4">
               <div
                 v-for="market in publicMarkets"
                 :key="market.name"
-                class="p-4 bg-gray-50 rounded-2xl border border-gray-200"
+                @click="selectMarket(market.name)"
+                :class="[
+                  'p-4 bg-gray-50 rounded-2xl border-2 cursor-pointer transition-all duration-200',
+                  selectedMarket === market.name
+                    ? 'border-primary-600 bg-primary-50 shadow-md'
+                    : 'border-gray-200 hover:border-primary-300 hover:bg-gray-100'
+                ]"
               >
                 <h4 class="text-sm sm:text-base font-semibold text-gray-900">{{ market.name }}</h4>
                 <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ market.barangay }}</p>
@@ -289,7 +383,45 @@ const productsStore = useProductsStore()
 const user = computed(() => authStore.user)
 
 const imageErrors = ref<Record<string, boolean>>({})
+const selectedMarket = ref<string>('Butuan Public Market')
+const mapIframeSrc = ref<string>('https://maps.google.com/maps?q=Butuan%20Public%20Market%2C%20Butuan%20City&output=embed')
+const selectedMarketStores = ref<Array<{ name: string; products: string }>>([])
+const showStores = ref<boolean>(false)
+const selectedStoreInfo = ref<{ name: string; products: string } | null>(null)
 
+type StoreMarker = {
+  id: number
+  position: { x: number; y: number }
+  name: string
+  products: string
+}
+
+const storeMarkers = ref<Record<string, StoreMarker[]>>({
+  'Butuan Public Market': [
+    { id: 1, position: { x: 25, y: 30 }, name: 'Fresh Valley Fruits', products: 'Fresh tropical fruits - mangoes, papayas, bananas' },
+    { id: 2, position: { x: 70, y: 35 }, name: 'Golden Orchard', products: 'Organic fruits and produce' },
+    { id: 3, position: { x: 40, y: 65 }, name: 'Sunrise Fruits Stall', products: 'Daily fresh fruits and vegetables' },
+    { id: 4, position: { x: 65, y: 70 }, name: 'Tropical Harvest', products: 'Seasonal fruits and citrus' }
+  ],
+  'Libertad Public Market': [
+    { id: 1, position: { x: 30, y: 40 }, name: 'Libertad Fruit Center', products: 'Wide variety of fresh fruits' },
+    { id: 2, position: { x: 60, y: 30 }, name: 'Nature\'s Bounty', products: 'Organic and pesticide-free fruits' },
+    { id: 3, position: { x: 75, y: 60 }, name: 'Green Valley Produce', products: 'Fresh fruits and local vegetables' },
+    { id: 4, position: { x: 45, y: 75 }, name: 'Premium Fruits Market', products: 'High-quality imported and local fruits' }
+  ],
+  'San Roque Public Market': [
+    { id: 1, position: { x: 35, y: 35 }, name: 'San Roque Fresh Fruits', products: 'Local fruits at competitive prices' },
+    { id: 2, position: { x: 65, y: 45 }, name: 'Community Harvest', products: 'Fresh daily fruit selection' },
+    { id: 3, position: { x: 50, y: 70 }, name: 'Neighborhood Fruits', products: 'Traditional fruit varieties' },
+    { id: 4, position: { x: 80, y: 55 }, name: 'Quality Fruits Stall', products: 'Best selection of fresh fruits' }
+  ],
+  'Ampayon Public Market': [
+    { id: 1, position: { x: 40, y: 50 }, name: 'Ampayon Fresh Market', products: 'Premium fresh fruits daily' },
+    { id: 2, position: { x: 70, y: 40 }, name: 'Fruit Paradise', products: 'Exotic and common fruits' },
+    { id: 3, position: { x: 55, y: 65 }, name: 'Ampayon Organic Fruits', products: 'Naturally grown fruits' },
+    { id: 4, position: { x: 25, y: 60 }, name: 'Local Fruits Depot', products: 'Farm-fresh fruits and produce' }
+  ]
+})
 type DashboardRecentOrder = {
   id: string
   product: { name: string; image_url: string }
@@ -303,6 +435,33 @@ type DashboardFeaturedProduct = {
   description: string
   price: number
   image_url: string
+}
+
+const marketStores: Record<string, Array<{ name: string; products: string }>> = {
+  'Butuan Public Market': [
+    { name: 'Fresh Valley Fruits', products: 'Fresh tropical fruits - mangoes, papayas, bananas' },
+    { name: 'Golden Orchard', products: 'Organic fruits and produce' },
+    { name: 'Sunrise Fruits Stall', products: 'Daily fresh fruits and vegetables' },
+    { name: 'Tropical Harvest', products: 'Seasonal fruits and citrus' }
+  ],
+  'Libertad Public Market': [
+    { name: 'Libertad Fruit Center', products: 'Wide variety of fresh fruits' },
+    { name: 'Nature\'s Bounty', products: 'Organic and pesticide-free fruits' },
+    { name: 'Green Valley Produce', products: 'Fresh fruits and local vegetables' },
+    { name: 'Premium Fruits Market', products: 'High-quality imported and local fruits' }
+  ],
+  'San Roque Public Market': [
+    { name: 'San Roque Fresh Fruits', products: 'Local fruits at competitive prices' },
+    { name: 'Community Harvest', products: 'Fresh daily fruit selection' },
+    { name: 'Neighborhood Fruits', products: 'Traditional fruit varieties' },
+    { name: 'Quality Fruits Stall', products: 'Best selection of fresh fruits' }
+  ],
+  'Ampayon Public Market': [
+    { name: 'Ampayon Fresh Market', products: 'Premium fresh fruits daily' },
+    { name: 'Fruit Paradise', products: 'Exotic and common fruits' },
+    { name: 'Ampayon Organic Fruits', products: 'Naturally grown fruits' },
+    { name: 'Local Fruits Depot', products: 'Farm-fresh fruits and produce' }
+  ]
 }
 
 const stats = ref({
@@ -367,6 +526,27 @@ const getStatusBadgeClass = (status: string) => {
     cancelled: 'badge-danger'
   }
   return classes[status as keyof typeof classes] || 'badge-gray'
+}
+
+const selectMarket = (marketName: string) => {
+  selectedMarket.value = marketName
+  // Update iframe src to navigate to the selected market
+  const query = `${marketName}%2C%20Butuan%20City`
+  mapIframeSrc.value = `https://maps.google.com/maps?q=${query}&output=embed`
+  // Show stores for the selected market
+  const marketStoresData = marketStores[marketName] || []
+  selectedMarketStores.value = marketStoresData.map(m => ({ name: m.name, products: m.products }))
+  showStores.value = true
+  selectedStoreInfo.value = null
+}
+
+const closeStoresModal = () => {
+  showStores.value = false
+  selectedStoreInfo.value = null
+}
+
+const selectStoreMarker = (store: StoreMarker) => {
+  selectedStoreInfo.value = { name: store.name, products: store.products }
 }
 
 const handleImageError = (orderId: string) => {

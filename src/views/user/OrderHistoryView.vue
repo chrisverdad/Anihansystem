@@ -172,14 +172,24 @@
                     {{ order.status }}
                   </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex flex-col space-y-1">
+                <td class="px-6 py-4">
+                  <div class="flex flex-col space-y-2">
                     <span :class="getPaymentStatusBadgeClass(order.payment_status)">
                       {{ order.payment_status }}
                     </span>
                     <span class="text-xs text-gray-500">
-                      {{ order.payment_method?.toUpperCase() }}
+                      {{ order.payment_method === 'bank' ? 'Bank Transfer' : order.payment_method === 'gcash' ? 'GCash' : order.payment_method === 'cash' ? 'Cash on Delivery' : order.payment_method?.toUpperCase() }}
                     </span>
+                    <!-- Receipt Image Thumbnail for GCash and Bank -->
+                    <div v-if="(order.payment_method === 'gcash' || order.payment_method === 'bank') && order.receipt_image" class="mt-1">
+                      <img 
+                        :src="getImageUrl(order.receipt_image)" 
+                        :alt="order.payment_method === 'bank' ? 'Bank Receipt' : 'GCash Receipt'"
+                        class="h-20 w-20 object-cover rounded border border-gray-300"
+                        @click="viewReceiptImage(order.receipt_image)"
+                        style="cursor: pointer;"
+                      />
+                    </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -280,6 +290,93 @@
             <span class="text-xs text-slate-500 px-2 py-1 rounded-md bg-slate-100">{{
               selectedOrder.payment_method?.toUpperCase()
             }}</span>
+          </div>
+
+          <!-- Payment Details Section -->
+          <div 
+            v-if="selectedOrder.payment_method === 'bank'"
+            class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-50/50 p-4 ring-1 ring-blue-200"
+          >
+            <div class="flex items-center gap-2 text-blue-800 text-xs font-semibold uppercase tracking-wide mb-3">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"></path>
+              </svg>
+              Bank Transfer Payment
+            </div>
+            <dl class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-blue-600">Bank</dt>
+                <dd class="font-semibold text-blue-900">PNB</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-blue-600">Account</dt>
+                <dd class="font-mono font-semibold text-blue-900">402949769</dd>
+              </div>
+              <div v-if="selectedOrder.payment_reference" class="flex justify-between">
+                <dt class="text-blue-600">Reference #</dt>
+                <dd class="font-mono text-blue-900">{{ selectedOrder.payment_reference }}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-blue-600">Status</dt>
+                <dd :class="['font-semibold', selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-amber-600']">
+                  {{ selectedOrder.payment_status?.toUpperCase() }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Alternative Payment Methods Display -->
+          <div 
+            v-else-if="selectedOrder.payment_method === 'gcash'"
+            class="rounded-xl bg-gradient-to-br from-purple-50 to-purple-50/50 p-4 ring-1 ring-purple-200"
+          >
+            <div class="flex items-center gap-2 text-purple-800 text-xs font-semibold uppercase tracking-wide mb-3">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm0 8a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"></path>
+              </svg>
+              GCash Payment
+            </div>
+            <dl class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-purple-600">Payment Method</dt>
+                <dd class="font-semibold text-purple-900">GCash</dd>
+              </div>
+              <div v-if="selectedOrder.payment_reference" class="flex justify-between">
+                <dt class="text-purple-600">Reference #</dt>
+                <dd class="font-mono text-purple-900">{{ selectedOrder.payment_reference }}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-purple-600">Status</dt>
+                <dd :class="['font-semibold', selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-amber-600']">
+                  {{ selectedOrder.payment_status?.toUpperCase() }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Cash Payment Display -->
+          <div 
+            v-else-if="selectedOrder.payment_method === 'cash'"
+            class="rounded-xl bg-gradient-to-br from-green-50 to-green-50/50 p-4 ring-1 ring-green-200"
+          >
+            <div class="flex items-center gap-2 text-green-800 text-xs font-semibold uppercase tracking-wide mb-3">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+              </svg>
+              Cash Payment
+            </div>
+            <dl class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-green-600">Payment Method</dt>
+                <dd class="font-semibold text-green-900">Cash on Delivery</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-green-600">Status</dt>
+                <dd :class="['font-semibold', selectedOrder.payment_status === 'paid' ? 'text-green-600' : 'text-amber-600']">
+                  {{ selectedOrder.payment_status?.toUpperCase() }}
+                </dd>
+              </div>
+            </dl>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -597,6 +694,11 @@ const cancelOrder = async (orderId: string) => {
   } catch (error) {
     toast.error('Failed to cancel order')
   }
+}
+
+const viewReceiptImage = (imagePath: string) => {
+  // Open receipt image in a modal or new window
+  window.open(getImageUrl(imagePath), '_blank')
 }
 
 const getStatusBadgeClass = (status: string) => {

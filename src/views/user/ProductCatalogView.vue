@@ -655,6 +655,22 @@ const placeOrder = async () => {
     console.log('Current user:', authStore.user)
     console.log('User ID:', authStore.user?.id)
     
+    // Upload receipt image if provided
+    let receiptImagePath = ''
+    if (receiptFile.value) {
+      try {
+        const formData = new FormData()
+        formData.append('file', receiptFile.value)
+        formData.append('type', 'order_receipt')
+        const uploadResponse = await apiService.uploadFile(formData)
+        if (uploadResponse.success && uploadResponse.data?.file_path) {
+          receiptImagePath = uploadResponse.data.file_path
+        }
+      } catch (uploadError) {
+        console.warn('Receipt upload failed, continuing without image:', uploadError)
+      }
+    }
+    
     // Create order data
     const orderData = {
       user_id: authStore.user?.id || '3', // Use current user ID or fallback
@@ -664,6 +680,7 @@ const placeOrder = async () => {
       payment_status: 'pending' as const,
       payment_method: paymentMethod.value,
       payment_reference: paymentReference.value,
+      receipt_image: receiptImagePath,
       delivery_status: 'pending' as const,
       delivery_address: deliveryAddress.value,
       delivery_notes: deliveryNotes.value,
